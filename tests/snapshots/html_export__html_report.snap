@@ -1,0 +1,123 @@
+---
+source: tests/html_export.rs
+expression: html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Playlist Analysis</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --bg: #f7f7f8;
+  --fg: #1c1c1e;
+  --muted: #6b6b70;
+  --card: #ffffff;
+  --border: #e3e3e8;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141416;
+    --fg: #f2f2f4;
+    --muted: #9a9aa0;
+    --card: #1e1e21;
+    --border: #2c2c31;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.5;
+}
+header, main { width: 91.666667%; margin: 0 auto; padding: 1.25rem 1rem; }
+h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
+h2 { font-size: 1.25rem; border-bottom: 1px solid var(--border); padding-bottom: 0.35rem; margin-top: 2rem; }
+h3 { font-size: 1.05rem; margin: 1.5rem 0 0.25rem; }
+.meta { color: var(--muted); font-size: 0.85rem; margin: 0.15rem 0; }
+.mono { font-family: ui-monospace, "SF Mono", Consolas, monospace; font-size: 0.85em; }
+.cards { display: flex; flex-wrap: wrap; gap: 0.75rem; padding: 0.5rem 0; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+}
+.card .value { font-size: 1.4rem; font-weight: 600; }
+.card .label { color: var(--muted); font-size: 0.8rem; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 0.5rem 0 1.5rem;
+}
+th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; font-size: 0.9rem; }
+th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+tr:last-child td { border-bottom: none; }
+tr.group td { border-top: 2px solid var(--border); }
+ul.tight { margin: 0; padding-left: 1.1rem; }
+.empty { color: var(--muted); font-style: italic; }
+.num { text-align: right; }
+</style>
+</head>
+<body>
+<header>
+<h1>Playlist Analysis</h1>
+<p class="meta">Source: <span class="mono">apple_music_sample.xml</span> | Generated: <span class="mono">2026-01-01T00:00:00Z</span></p>
+<p class="meta">Library: 7 songs, 4 albums, 3 artists, 3 playlists</p>
+</header>
+<main>
+<section class="cards">
+<div class="card"><span class="value">3</span><span class="label">Playlists analyzed</span></div>
+<div class="card"><span class="value">7</span><span class="label">Songs</span></div>
+<div class="card"><span class="value">1</span><span class="label">Playlists with duplicates</span></div>
+<div class="card"><span class="value">1</span><span class="label">Duplicate findings</span></div>
+<div class="card"><span class="value">1</span><span class="label">Album variants</span></div>
+<div class="card"><span class="value">2</span><span class="label">Alternative versions</span></div>
+</section>
+<section>
+<h2>Same Title, Different Album</h2>
+<table>
+<thead><tr><th>Title</th><th>Artist</th><th>Albums</th></tr></thead>
+<tbody>
+<tr><td>Beta</td><td>Band</td><td><ul class="tight"><li>Album XYZ<ul class="tight"><li>Road Trip</li></ul></li><li>Album XYZ (Deluxe)<ul class="tight"><li>Deluxe Mix</li></ul></li></ul></td></tr>
+</tbody>
+</table>
+</section>
+<section>
+<h2>Alternative Versions</h2>
+<table>
+<thead><tr><th>Title</th><th>Artist</th><th>Album</th><th>Playlists</th></tr></thead>
+<tbody>
+<tr><td>Alpha</td><td>Band</td><td>Album XYZ</td><td><ul class="tight"><li>Road Trip</li><li>Broken</li></ul></td></tr>
+<tr><td>Alpha</td><td>Band</td><td>Album XYZ</td><td><ul class="tight"><li>Road Trip</li></ul></td></tr>
+<tr><td>Alpha (Remastered 2011)</td><td>Band</td><td>Album XYZ</td><td><ul class="tight"><li>Road Trip</li></ul></td></tr>
+<tr class="group"><td>Beta</td><td>Band</td><td>Album XYZ</td><td><ul class="tight"><li>Road Trip</li></ul></td></tr>
+<tr><td>Beta</td><td>Band</td><td>Album XYZ (Deluxe)</td><td><ul class="tight"><li>Deluxe Mix</li></ul></td></tr>
+</tbody>
+</table>
+</section>
+<section>
+<h2>Duplicate Songs</h2>
+<h3>Road Trip</h3>
+<p class="meta">4 entries | 1 duplicate findings</p>
+<table>
+<thead><tr><th>Title</th><th>Artist</th><th>Album</th><th class="num">Count</th><th>Positions</th><th>Track IDs</th></tr></thead>
+<tbody>
+<tr><td>Alpha</td><td>Band</td><td>Album XYZ</td><td class="num">2</td><td class="mono">1, 2</td><td class="mono">1, 5</td></tr>
+</tbody>
+</table>
+</section>
+</main>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Major Version</key><integer>1</integer>
+	<key>Minor Version</key><integer>1</integer>
+	<key>Application Version</key><string>1.7.0.163</string>
+	<key>Library Persistent ID</key><string>FIXTURE000000001</string>
+	<key>Tracks</key>
+	<dict>
+		<key>1</key>
+		<dict>
+			<key>Track ID</key><integer>1</integer>
+			<key>Name</key><string>Alpha</string>
+			<key>Artist</key><string>Band</string>
+			<key>Album Artist</key><string>Band</string>
+			<key>Album</key><string>Album XYZ</string>
+			<key>Total Time</key><integer>185000</integer>
+			<key>Track Number</key><integer>1</integer>
+			<key>Disc Number</key><integer>1</integer>
+		</dict>
+		<key>2</key>
+		<dict>
+			<key>Track ID</key><integer>2</integer>
+			<key>Name</key><string>Beta</string>
+			<key>Artist</key><string>Band</string>
+			<key>Album</key><string>Album XYZ</string>
+			<key>Total Time</key><integer>200000</integer>
+			<key>Track Number</key><integer>2</integer>
+		</dict>
+		<key>3</key>
+		<dict>
+			<key>Track ID</key><integer>3</integer>
+			<key>Name</key><string>Beta</string>
+			<key>Artist</key><string>Band</string>
+			<key>Album</key><string>Album XYZ (Deluxe)</string>
+			<key>Total Time</key><integer>201000</integer>
+			<key>Track Number</key><integer>2</integer>
+		</dict>
+		<key>4</key>
+		<dict>
+			<key>Track ID</key><integer>4</integer>
+			<key>Name</key><string>Gamma</string>
+			<key>Artist</key><string>Solo</string>
+			<key>Album</key><string>Other Album</string>
+		</dict>
+		<key>5</key>
+		<dict>
+			<key>Track ID</key><integer>5</integer>
+			<key>Name</key><string>Alpha</string>
+			<key>Artist</key><string>Band</string>
+			<key>Album</key><string>Album XYZ</string>
+		</dict>
+		<key>6</key>
+		<dict>
+			<key>Track ID</key><integer>6</integer>
+			<key>Name</key><string>Delta</string>
+			<key>Artist</key><string>Band</string>
+		</dict>
+		<key>7</key>
+		<dict>
+			<key>Track ID</key><integer>7</integer>
+			<key>Name</key><string>&#201;clair</string>
+			<key>Artist</key><string>&#1041;&#1101;&#1085;&#1076;</string>
+			<key>Album</key><string>&#1040;&#1083;&#1100;&#1073;&#1086;&#1084;</string>
+		</dict>
+		<key>8</key>
+		<dict>
+			<key>Track ID</key><integer>8</integer>
+			<key>Name</key><string>Alpha (Remastered 2011)</string>
+			<key>Artist</key><string>Band</string>
+			<key>Album</key><string>Album XYZ</string>
+		</dict>
+	</dict>
+	<key>Playlists</key>
+	<array>
+		<dict>
+			<key>Name</key><string>Road Trip</string>
+			<key>Playlist ID</key><integer>100</integer>
+			<key>Playlist Items</key>
+			<array>
+				<dict><key>Track ID</key><integer>1</integer></dict>
+				<dict><key>Track ID</key><integer>5</integer></dict>
+				<dict><key>Track ID</key><integer>2</integer></dict>
+				<dict><key>Track ID</key><integer>8</integer></dict>
+			</array>
+		</dict>
+		<dict>
+			<key>Name</key><string>Deluxe Mix</string>
+			<key>Playlist ID</key><integer>101</integer>
+			<key>Playlist Items</key>
+			<array>
+				<dict><key>Track ID</key><integer>3</integer></dict>
+			</array>
+		</dict>
+		<dict>
+			<key>Name</key><string>Broken</string>
+			<key>Playlist ID</key><integer>102</integer>
+			<key>Playlist Items</key>
+			<array>
+				<dict><key>Track ID</key><integer>1</integer></dict>
+				<dict><key>Track ID</key><integer>999</integer></dict>
+			</array>
+		</dict>
+		<dict>
+			<key>Name</key><string>Folder</string>
+			<key>Playlist ID</key><integer>103</integer>
+			<key>Folder</key><true/>
+			<key>Playlist Items</key>
+			<array>
+				<dict><key>Track ID</key><integer>1</integer></dict>
+			</array>
+		</dict>
+		<dict>
+			<key>Playlist ID</key><integer>104</integer>
+			<key>Playlist Items</key>
+			<array>
+				<dict><key>Track ID</key><integer>1</integer></dict>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>
