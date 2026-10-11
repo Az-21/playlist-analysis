@@ -10,7 +10,8 @@ fn default_analyses_register_all_checks() {
         vec![
             "duplicate-songs",
             "same-title-different-album",
-            "alternative-versions"
+            "alternative-versions",
+            "similar-albums"
         ]
     );
 }

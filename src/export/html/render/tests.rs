@@ -102,8 +102,11 @@ fn fixture_report() -> Report {
             Finding::AlternativeVersions(AlternativeVersions {
                 songs: vec![SongId(2), SongId(3)],
             }),
+            Finding::SimilarAlbums(SimilarAlbums {
+                albums: vec![AlbumId(0), AlbumId(1)],
+            }),
         ],
-        total_findings: 4,
+        total_findings: 5,
     }
 }
 
@@ -116,6 +119,7 @@ fn renders_header_summary_and_findings() {
     assert!(html.contains("Library: 4 songs, 2 albums, 1 artists, 2 playlists"));
     assert!(html.contains("Playlists analyzed"));
     assert!(html.contains("Duplicate findings"));
+    assert!(html.contains("Similar albums"));
 }
 
 #[test]
@@ -170,6 +174,20 @@ fn renders_alternative_versions_as_grouped_variant_rows() {
 }
 
 #[test]
+fn renders_similar_albums_with_their_playlists() {
+    let html = render(&fixture_report(), &fixture_library(), &meta());
+    assert!(html.contains("<h2>Similar Albums</h2>"));
+    assert!(html.contains(concat!(
+        "<tr><td><ul class=\"tight\">",
+        "<li>Album XYZ <span class=\"meta\">Band</span>",
+        "<ul class=\"tight\"><li>Mix</li></ul></li>",
+        "<li>Album XYZ (Deluxe) <span class=\"meta\">Band</span>",
+        "<ul class=\"tight\"><li>Deluxe Mix</li></ul></li>",
+        "</ul></td></tr>"
+    )));
+}
+
+#[test]
 fn renders_empty_states_when_there_are_no_findings() {
     let report = Report {
         findings: Vec::new(),
@@ -178,6 +196,7 @@ fn renders_empty_states_when_there_are_no_findings() {
     let html = render(&report, &fixture_library(), &meta());
     assert!(html.contains("No playlist contains the same song twice."));
     assert!(html.contains("No songs share a title and artist across different albums."));
+    assert!(html.contains("No similar album versions were found."));
     assert!(html.contains("No alternative versions of the same song were found."));
     assert!(!html.contains("<table>"));
 }

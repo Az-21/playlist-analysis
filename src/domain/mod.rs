@@ -12,6 +12,6 @@ pub use album::Album;
 pub use artist::Artist;
 pub use ids::{AlbumId, ArtistId, PlaylistId, SongId};
 pub use library::{Library, format_duration};
-pub use normalize::normalize_text;
+pub use normalize::{base_text, normalize_text};
 pub use playlist::Playlist;
 pub use song::Song;

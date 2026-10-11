@@ -3,7 +3,7 @@
 use std::collections::BTreeSet;
 
 use crate::analysis::{
-    AlternativeVersions, DuplicateEntries, Finding, Report, SameTitleDifferentAlbum,
+    AlternativeVersions, DuplicateEntries, Finding, Report, SameTitleDifferentAlbum, SimilarAlbums,
 };
 use crate::domain::{AlbumId, ArtistId, Library, Song, SongId};
 use crate::export::ReportMeta;
@@ -27,6 +27,7 @@ pub(super) fn render(report: &Report, library: &Library, meta: &ReportMeta) -> S
     html.push_str("<main>\n");
     html.push_str(&summary(report, library));
     html.push_str(&album_variants_section(report, library));
+    html.push_str(&similar_albums_section(report, library));
     html.push_str(&alternative_versions_section(report, library));
     html.push_str(&duplicate_sections(report, library));
     html.push_str("</main>\n");
@@ -68,6 +69,7 @@ fn summary(report: &Report, library: &Library) -> String {
         ),
         card("Duplicate findings", &duplicates.len().to_string()),
         card("Album variants", &album_variants(report).len().to_string()),
+        card("Similar albums", &similar_albums(report).len().to_string()),
         card(
             "Alternative versions",
             &alternative_versions(report).len().to_string(),
@@ -98,6 +100,64 @@ fn album_variants_section(report: &Report, library: &Library) -> String {
         html.push_str(&variant_row(variant, library));
     }
     html.push_str("</tbody>\n</table>\n</section>\n");
+    html
+}
+
+fn similar_albums_section(report: &Report, library: &Library) -> String {
+    let similar = similar_albums(report);
+    let mut html = String::from("<section>\n<h2>Similar Albums</h2>\n");
+    if similar.is_empty() {
+        html.push_str("<p class=\"empty\">No similar album versions were found.</p>\n</section>\n");
+        return html;
+    }
+    html.push_str("<table>\n<thead><tr><th>Albums</th></tr></thead>\n<tbody>\n");
+    for group in similar {
+        html.push_str(&similar_albums_row(group, library));
+    }
+    html.push_str("</tbody>\n</table>\n</section>\n");
+    html
+}
+
+fn similar_albums_row(group: &SimilarAlbums, library: &Library) -> String {
+    let mut html = String::from("<tr><td><ul class=\"tight\">");
+    for album in &group.albums {
+        push_html(
+            &mut html,
+            format_args!(
+                "<li>{} <span class=\"meta\">{}</span>",
+                escape_html(album_title(library, *album)),
+                escape_html(album_artist_name(library, *album)),
+            ),
+        );
+        html.push_str(&album_playlists(*album, library));
+        html.push_str("</li>");
+    }
+    html.push_str("</ul></td></tr>\n");
+    html
+}
+
+/// Playlists that reference any song on `album`
+fn album_playlists(album: AlbumId, library: &Library) -> String {
+    let mut html = String::from("<ul class=\"tight\">");
+    let mut any = false;
+    for playlist in &library.playlists {
+        let uses_album = playlist.entries.iter().any(|song_id| {
+            library
+                .song(*song_id)
+                .is_some_and(|song| song.album == album)
+        });
+        if uses_album {
+            any = true;
+            push_html(
+                &mut html,
+                format_args!("<li>{}</li>", escape_html(&playlist.name)),
+            );
+        }
+    }
+    if !any {
+        html.push_str("<li>(none)</li>");
+    }
+    html.push_str("</ul>");
     html
 }
 
@@ -269,7 +329,9 @@ fn duplicate_findings(report: &Report) -> Vec<&DuplicateEntries> {
         .iter()
         .filter_map(|finding| match finding {
             Finding::DuplicateEntries(duplicate) => Some(duplicate),
-            Finding::SameTitleDifferentAlbum(_) | Finding::AlternativeVersions(_) => None,
+            Finding::SameTitleDifferentAlbum(_)
+            | Finding::AlternativeVersions(_)
+            | Finding::SimilarAlbums(_) => None,
         })
         .collect()
 }
@@ -280,7 +342,22 @@ fn album_variants(report: &Report) -> Vec<&SameTitleDifferentAlbum> {
         .iter()
         .filter_map(|finding| match finding {
             Finding::SameTitleDifferentAlbum(variant) => Some(variant),
-            Finding::DuplicateEntries(_) | Finding::AlternativeVersions(_) => None,
+            Finding::DuplicateEntries(_)
+            | Finding::AlternativeVersions(_)
+            | Finding::SimilarAlbums(_) => None,
+        })
+        .collect()
+}
+
+fn similar_albums(report: &Report) -> Vec<&SimilarAlbums> {
+    report
+        .findings
+        .iter()
+        .filter_map(|finding| match finding {
+            Finding::SimilarAlbums(group) => Some(group),
+            Finding::DuplicateEntries(_)
+            | Finding::SameTitleDifferentAlbum(_)
+            | Finding::AlternativeVersions(_) => None,
         })
         .collect()
 }
@@ -291,7 +368,9 @@ fn alternative_versions(report: &Report) -> Vec<&AlternativeVersions> {
         .iter()
         .filter_map(|finding| match finding {
             Finding::AlternativeVersions(alternative) => Some(alternative),
-            Finding::DuplicateEntries(_) | Finding::SameTitleDifferentAlbum(_) => None,
+            Finding::DuplicateEntries(_)
+            | Finding::SameTitleDifferentAlbum(_)
+            | Finding::SimilarAlbums(_) => None,
         })
         .collect()
 }
@@ -300,6 +379,12 @@ fn album_title(library: &Library, id: AlbumId) -> &str {
     library
         .album(id)
         .map_or("(unknown album)", |album| album.title.as_str())
+}
+
+fn album_artist_name(library: &Library, id: AlbumId) -> &str {
+    library.album(id).map_or("(unknown artist)", |record| {
+        artist_name(library, record.artist)
+    })
 }
 
 fn artist_name(library: &Library, id: ArtistId) -> &str {

@@ -91,17 +91,19 @@ fn interns_unicode_metadata() {
 }
 
 #[test]
-fn analyzes_duplicates_album_variants_and_alternative_versions() {
+fn analyzes_duplicates_album_variants_alternative_versions_and_similar_albums() {
     let output = parse_fixture();
     let report = analysis::run(&output.library, &analysis::default_analyses());
-    assert_eq!(report.total_findings, 4);
+    assert_eq!(report.total_findings, 5);
 
     let duplicate = report
         .findings
         .iter()
         .find_map(|finding| match finding {
             Finding::DuplicateEntries(duplicate) => Some(duplicate),
-            Finding::SameTitleDifferentAlbum(_) | Finding::AlternativeVersions(_) => None,
+            Finding::SameTitleDifferentAlbum(_)
+            | Finding::AlternativeVersions(_)
+            | Finding::SimilarAlbums(_) => None,
         })
         .expect("duplicate finding exists");
     assert_eq!(duplicate.playlist, PlaylistId(100));
@@ -113,7 +115,9 @@ fn analyzes_duplicates_album_variants_and_alternative_versions() {
         .iter()
         .find_map(|finding| match finding {
             Finding::SameTitleDifferentAlbum(variant) => Some(variant),
-            Finding::DuplicateEntries(_) | Finding::AlternativeVersions(_) => None,
+            Finding::DuplicateEntries(_)
+            | Finding::AlternativeVersions(_)
+            | Finding::SimilarAlbums(_) => None,
         })
         .expect("album variant finding exists");
     assert_eq!(variant.title, "Beta");
@@ -134,10 +138,36 @@ fn analyzes_duplicates_album_variants_and_alternative_versions() {
         .iter()
         .filter_map(|finding| match finding {
             Finding::AlternativeVersions(alternative) => Some(alternative),
-            Finding::DuplicateEntries(_) | Finding::SameTitleDifferentAlbum(_) => None,
+            Finding::DuplicateEntries(_)
+            | Finding::SameTitleDifferentAlbum(_)
+            | Finding::SimilarAlbums(_) => None,
         })
         .collect();
     assert_eq!(alternatives.len(), 2);
     assert_eq!(alternatives[0].songs, vec![SongId(1), SongId(5), SongId(8)]);
     assert_eq!(alternatives[1].songs, vec![SongId(2), SongId(3)]);
+
+    let similar = report
+        .findings
+        .iter()
+        .find_map(|finding| match finding {
+            Finding::SimilarAlbums(similar) => Some(similar),
+            Finding::DuplicateEntries(_)
+            | Finding::SameTitleDifferentAlbum(_)
+            | Finding::AlternativeVersions(_) => None,
+        })
+        .expect("similar albums finding exists");
+    let titles: Vec<&str> = similar
+        .albums
+        .iter()
+        .map(|album| {
+            output
+                .library
+                .album(*album)
+                .expect("album exists")
+                .title
+                .as_str()
+        })
+        .collect();
+    assert_eq!(titles, vec!["Album XYZ", "Album XYZ (Deluxe)"]);
 }

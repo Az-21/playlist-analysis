@@ -83,6 +83,7 @@ ul.tight { margin: 0; padding-left: 1.1rem; }
 <div class="card"><span class="value">1</span><span class="label">Playlists with duplicates</span></div>
 <div class="card"><span class="value">1</span><span class="label">Duplicate findings</span></div>
 <div class="card"><span class="value">1</span><span class="label">Album variants</span></div>
+<div class="card"><span class="value">1</span><span class="label">Similar albums</span></div>
 <div class="card"><span class="value">2</span><span class="label">Alternative versions</span></div>
 </section>
 <section>
@@ -91,6 +92,15 @@ ul.tight { margin: 0; padding-left: 1.1rem; }
 <thead><tr><th>Title</th><th>Artist</th><th>Albums</th></tr></thead>
 <tbody>
 <tr><td>Beta</td><td>Band</td><td><ul class="tight"><li>Album XYZ<ul class="tight"><li>Road Trip</li></ul></li><li>Album XYZ (Deluxe)<ul class="tight"><li>Deluxe Mix</li></ul></li></ul></td></tr>
+</tbody>
+</table>
+</section>
+<section>
+<h2>Similar Albums</h2>
+<table>
+<thead><tr><th>Albums</th></tr></thead>
+<tbody>
+<tr><td><ul class="tight"><li>Album XYZ <span class="meta">Band</span><ul class="tight"><li>Road Trip</li><li>Broken</li></ul></li><li>Album XYZ (Deluxe) <span class="meta">Band</span><ul class="tight"><li>Deluxe Mix</li></ul></li></ul></td></tr>
 </tbody>
 </table>
 </section>

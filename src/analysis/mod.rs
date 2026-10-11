@@ -4,11 +4,13 @@ mod alternative_versions;
 mod duplicate_songs;
 mod report;
 mod same_title_different_album;
+mod similar_albums;
+mod union_find;
 
 use crate::domain::Library;
 pub use report::{
     AlternativeVersions, DuplicateEntries, DuplicateOccurrence, Finding, Report,
-    SameTitleDifferentAlbum,
+    SameTitleDifferentAlbum, SimilarAlbums,
 };
 
 /// A library-wide check that produces findings
@@ -28,6 +30,7 @@ pub fn default_analyses() -> Vec<Box<dyn Analysis>> {
         Box::new(duplicate_songs::DuplicateSongs),
         Box::new(same_title_different_album::SameTitleDifferentAlbum),
         Box::new(alternative_versions::AlternativeVersions),
+        Box::new(similar_albums::SimilarAlbums),
     ]
 }
 

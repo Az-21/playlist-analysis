@@ -65,17 +65,6 @@ fn group(findings: &[Finding]) -> &AlternativeVersionsFinding {
 }
 
 #[test]
-fn strips_bracketed_and_dashed_decorations() {
-    assert_eq!(strip_decorations("alpha (remastered 2011)"), "alpha");
-    assert_eq!(strip_decorations("alpha [deluxe edition]"), "alpha");
-    assert_eq!(strip_decorations("alpha - live"), "alpha");
-    assert_eq!(strip_decorations("alpha - 2011 remaster"), "alpha");
-    assert_eq!(strip_decorations("alpha feat. someone"), "alpha");
-    assert_eq!(strip_decorations("alpha (part 2)"), "alpha (part 2)");
-    assert_eq!(strip_decorations("credit"), "credit");
-}
-
-#[test]
 fn groups_titles_differing_only_in_decorations() {
     let library = library(
         vec![

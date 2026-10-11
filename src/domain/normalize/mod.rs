@@ -1,5 +1,9 @@
 //! Text normalization used when comparing metadata across tracks
 
+mod decorations;
+
+pub use decorations::base_text;
+
 /// Trims, collapses internal whitespace runs, and lowercases the input
 ///
 /// The result is used as an interning key and as the comparison key for analyses, so spelling variants that differ only in case or whitespace compare equal

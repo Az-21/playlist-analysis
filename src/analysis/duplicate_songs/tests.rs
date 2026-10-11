@@ -132,7 +132,9 @@ fn reports_duplicates_of_each_playlist_separately() {
     assert_eq!(findings.len(), 2);
     let first = match &findings[0] {
         Finding::DuplicateEntries(duplicate) => duplicate,
-        other @ (Finding::SameTitleDifferentAlbum(_) | Finding::AlternativeVersions(_)) => {
+        other @ (Finding::SameTitleDifferentAlbum(_)
+        | Finding::AlternativeVersions(_)
+        | Finding::SimilarAlbums(_)) => {
             panic!("expected duplicate entries, got {other:?}")
         }
     };
@@ -140,7 +142,9 @@ fn reports_duplicates_of_each_playlist_separately() {
     assert_eq!(first.occurrences.len(), 2);
     let second = match &findings[1] {
         Finding::DuplicateEntries(duplicate) => duplicate,
-        other @ (Finding::SameTitleDifferentAlbum(_) | Finding::AlternativeVersions(_)) => {
+        other @ (Finding::SameTitleDifferentAlbum(_)
+        | Finding::AlternativeVersions(_)
+        | Finding::SimilarAlbums(_)) => {
             panic!("expected duplicate entries, got {other:?}")
         }
     };
@@ -160,7 +164,9 @@ fn sorts_findings_by_first_occurrence() {
         .iter()
         .filter_map(|finding| match finding {
             Finding::DuplicateEntries(duplicate) => Some(duplicate.title.as_str()),
-            Finding::SameTitleDifferentAlbum(_) | Finding::AlternativeVersions(_) => None,
+            Finding::SameTitleDifferentAlbum(_)
+            | Finding::AlternativeVersions(_)
+            | Finding::SimilarAlbums(_) => None,
         })
         .collect();
     assert_eq!(first_titles, vec!["Beta", "Alpha"]);

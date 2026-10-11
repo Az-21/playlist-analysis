@@ -34,6 +34,10 @@ playlist-analysis <INPUT> [--output-dir <DIR>] [--output-format <FORMAT>] [--ser
 - Alternative versions: songs referenced by a playlist whose title, artist, and
   album are all fuzzily similar after decoration stripping (remaster, live,
   deluxe, and similar tags), clustered into groups of possible versions.
+- Similar albums: albums referenced by any playlist with matching titles,
+  either after decoration stripping or as near-identical spellings, so mixed
+  use of standard, deluxe, and remastered editions surfaces even when their
+  tracks or artists differ.
 
 ## Development
 
